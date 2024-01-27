@@ -8,6 +8,7 @@ import os
 import requests
 import urllib3
 
+
 INVENIO_URL = "https://localhost:5000"
 
 
@@ -24,14 +25,16 @@ def main():
     level = logging.DEBUG if args.debug else logging.WARNING
     logging.basicConfig(format="%(levelname)s: %(message)s", level=level)
 
-
     token = os.environ["INVENIO_TOKEN"]
+    logging.debug(f"{token=}")
 
     headers = {
         "Accept": "application/json",
         "Content-Type": "application/json",
         "Authorization": f"Bearer {token}",
     }
+
+    logging.debug("request headers:\n%s\n", pformat(headers))
 
     data = {"location": "suppressed"}
 
@@ -41,8 +44,11 @@ def main():
         api_url, headers=headers, data=json.dumps(data), verify=False
     )
 
-    pprint(dict(response.headers))
-    print(response.text)
+    logging.debug("response headers:\n%s\n", pformat(dict(response.headers)))
+
+    bucket = response.json()
+    print("bucket data:")
+    pprint(bucket)
 
 
 if __name__ == "__main__":
