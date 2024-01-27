@@ -44,6 +44,11 @@ def main():
         api_url, headers=headers, data=json.dumps(data), verify=False
     )
 
+    request = response.request
+    logging.debug("request url: %s", request.url)
+    logging.debug("request headers:\n%s\n", pformat(dict(request.headers)))
+    logging.debug("request body: %s", request.body)
+
     logging.debug("response headers:\n%s\n", pformat(dict(response.headers)))
 
     bucket = response.json()
